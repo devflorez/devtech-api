@@ -30,7 +30,7 @@ export class PrismaProductRepository implements ProductRepository, ProductPort {
 
     const products = await this.prisma.product.findMany({
       skip,
-      take: limit,
+      take: +limit,
       where,
     });
 
@@ -59,7 +59,11 @@ export class PrismaProductRepository implements ProductRepository, ProductPort {
   async getProductBySlug(slug: string): Promise<Product | null> {
     const product = await this.prisma.product.findUnique({
       where: { slug },
+      include: {
+        images: true,
+      },
     });
+
     if (!product) return null;
     return new Product(
       product.id,
@@ -72,6 +76,7 @@ export class PrismaProductRepository implements ProductRepository, ProductPort {
       product.imageAltText,
       product.slug,
       product.isFeatured,
+      product.images,
     );
   }
 
