@@ -30,6 +30,7 @@ export class WompiPaymentService implements PaymentPort {
       response.data.currency,
       response.data.transaction_id,
       response.data.status,
+      response.data.reference,
     );
   }
 

@@ -61,6 +61,7 @@ export class CreateTransactionUseCase {
       paymentData.currency,
       createdTransaction.id,
       'PENDING',
+      new Date().toISOString() + Math.random().toString(36).substring(7) +  createdTransaction.id,
     );
 
     await this.paymentPort.createPayment(payment);

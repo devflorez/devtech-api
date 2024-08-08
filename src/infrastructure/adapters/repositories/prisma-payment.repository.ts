@@ -15,6 +15,7 @@ export class PrismaPaymentRepository implements PaymentRepository, PaymentPort {
         currency: payment.currency,
         status: payment.status,
         transactionId: payment.transactionId,
+        reference: payment.reference,
       },
     });
     return new Payment(
@@ -22,6 +23,7 @@ export class PrismaPaymentRepository implements PaymentRepository, PaymentPort {
       createdPayment.currency,
       createdPayment.transactionId,
       createdPayment.status,
+      createdPayment.reference,
     );
   }
 }

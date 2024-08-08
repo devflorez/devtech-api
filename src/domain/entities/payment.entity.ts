@@ -4,5 +4,6 @@ export class Payment {
     public currency: string,
     public transactionId: number,
     public status: string,
+    public reference: string,
   ) {}
 }

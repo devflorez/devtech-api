@@ -1,73 +1,126 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# DevTech API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+## Descripción
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+DevTech API es una aplicación para gestionar productos, clientes, transacciones y envíos, con integración para pagos a través de Wompi. La aplicación está construida utilizando NestJS y Prisma.
 
-## Description
+[SWAGGER](https://devtech-api.onrender.com/api/docs)
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Estructura del Proyecto
 
-## Installation
+El proyecto sigue una arquitectura hexagonal, separando las preocupaciones de la lógica de negocio, la infraestructura y las interfaces.
 
-```bash
-$ yarn install
+### Directorios Principales
+
+- `src/application`: Contiene los casos de uso y puertos (interfaces).
+- `src/domain`: Define las entidades del dominio.
+- `src/infrastructure`: Contiene adaptadores y la configuración de infraestructura.
+- `src/infrastructure/adapters`: Implementaciones de los puertos, servicios de terceros y controladores.
+- `src/infrastructure/config`: Configuraciones de módulos y bases de datos.
+
+## Modelos de Prisma
+
+El esquema de Prisma define los modelos para productos, clientes, pagos, transacciones y envíos.
+
+```prisma
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Product {
+  id                Int          @id @default(autoincrement())
+  name              String
+  shortDescription  String
+  description       String
+  price             Int
+  stock             Int
+  imageUrl          String
+  imageAltText      String
+  slug              String       @unique
+  images            Image[]
+  isFeatured        Boolean
+  productTransactions ProductTransaction[]
+}
+
+model Image {
+  id         Int      @id @default(autoincrement())
+  url        String
+  altText    String
+  productId  Int
+  product    Product  @relation(fields: [productId], references: [id])
+}
+
+model Customer {
+  id         Int           @id @default(autoincrement())
+  name       String
+  email      String        @unique
+  transactions Transaction[]
+}
+
+model Payment {
+  id                    Int           @id @default(autoincrement())
+  amount                Int
+  reference             String
+  currency              String
+  status                String
+  transactionId         Int           @unique
+  transaction           Transaction   @relation(fields: [transactionId], references: [id])
+  wompiTransactionId    String?       
+  token                 String?       
+  type                  String?       
+  installments          Int?       
+}
+
+model Transaction {
+  id          Int         @id @default(autoincrement())
+  customerId  Int
+  paymentId   Int?        @unique
+  quantity    Int
+  total       Int
+  status      String
+  createdAt   DateTime    @default(now())
+  customer    Customer    @relation(fields: [customerId], references: [id])
+  payment     Payment?   
+  shipment    Shipment?
+  productTransactions ProductTransaction[]
+}
+
+model Shipment {
+  id             Int          @id @default(autoincrement())
+  transactionId  Int          @unique
+  address        String
+  city           String
+  state          String
+  postalCode     String
+  country        String
+  status         String       @default("PENDING")
+  transaction    Transaction  @relation(fields: [transactionId], references: [id])
+}
+
+model ProductTransaction {
+  id            Int          @id @default(autoincrement())
+  productId     Int
+  transactionId Int
+  product       Product      @relation(fields: [productId], references: [id])
+  transaction   Transaction  @relation(fields: [transactionId], references: [id])
+  quantity      Int
+}
+
 ```
 
-## Running the app
+## Instalación
+ - Clona el repositorio
+ - Instala las dependencias
+ - Configura las variables de entorno
+ - Ejecuta las migraciones de Prisma
+ - Genera el cliente de Prisma
 
-```bash
-# development
-$ yarn run start
-
-# watch mode
-$ yarn run start:dev
-
-# production mode
-$ yarn run start:prod
+## Uso
 ```
-
-## Test
-
-```bash
-# unit tests
-$ yarn run test
-
-# e2e tests
-$ yarn run test:e2e
-
-# test coverage
-$ yarn run test:cov
+npm run start
 ```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
