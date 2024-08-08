@@ -1,3 +1,5 @@
+import { ProductImage } from './product-image.entity';
+
 export class Product {
   constructor(
     public id: number,
@@ -9,6 +11,7 @@ export class Product {
     public imageUrl: string,
     public imageAltText: string,
     public slug: string,
-    public isFeatured: boolean, // Nuevo campo para productos destacados
+    public isFeatured: boolean,
+    public images?: ProductImage[],
   ) {}
 }

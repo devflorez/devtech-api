@@ -15,7 +15,8 @@ async function bootstrap() {
     .setDescription('API para la tienda de tecnología DevTech')
     .setVersion('1.0')
     .addTag('products', 'Operaciones relacionadas con productos')
-    .addTag('auth', 'Operaciones relacionadas con autenticación')
+    .addTag('transactions', 'Operaciones relacionadas con transacciones')
+    .addTag('payments', 'Operaciones relacionadas con pagos')
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api/docs', app, document);

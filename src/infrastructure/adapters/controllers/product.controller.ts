@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Query } from '@nestjs/common';
+import { Controller, Get, Param, Query, Version } from '@nestjs/common';
 import { ApiQuery, ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { GetAllProductsUseCase } from '../../../application/use-cases/get-all-products.use-case';
 import { GetProductBySlugUseCase } from '../../../application/use-cases/get-product-by-slug.use-case';
@@ -14,6 +14,7 @@ export class ProductController {
     private readonly getFeaturedProductsUseCase: GetFeaturedProductsUseCase,
   ) {}
 
+  @Version('1')
   @Get()
   @ApiOperation({ summary: 'Get all products' })
   @ApiQuery({ name: 'page', required: false, example: 1 })
@@ -48,6 +49,7 @@ export class ProductController {
     return this.getAllProductsUseCase.execute(page, limit, search);
   }
 
+  @Version('1')
   @Get('featured')
   @ApiOperation({ summary: 'Get featured products' })
   @ApiResponse({
@@ -72,6 +74,7 @@ export class ProductController {
     return this.getFeaturedProductsUseCase.execute();
   }
 
+  @Version('1')
   @Get(':slug')
   @ApiOperation({ summary: 'Get product by slug' })
   @ApiResponse({
