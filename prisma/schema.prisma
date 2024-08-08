@@ -8,7 +8,7 @@ generator client {
 }
 
 model Product {
-  id                Int      @id @default(autoincrement())
+  id                Int          @id @default(autoincrement())
   name              String
   shortDescription  String
   description       String
@@ -16,9 +16,10 @@ model Product {
   stock             Int
   imageUrl          String
   imageAltText      String
-  slug              String  @unique
+  slug              String       @unique
   images            Image[]
   isFeatured        Boolean
+  productTransactions ProductTransaction[]
 }
 
 model Image {
@@ -27,4 +28,60 @@ model Image {
   altText    String
   productId  Int
   product    Product  @relation(fields: [productId], references: [id])
+}
+
+model Customer {
+  id         Int           @id @default(autoincrement())
+  name       String
+  email      String        @unique
+  transactions Transaction[]
+}
+
+model Payment {
+  id                    Int           @id @default(autoincrement())
+  amount                Int
+  reference             String
+  currency              String
+  status                String
+  transactionId         Int           @unique
+  transaction           Transaction   @relation(fields: [transactionId], references: [id])
+  wompiTransactionId    String?       
+  token                 String?       
+  type                  String?       
+  installments          Int?       
+}
+
+model Transaction {
+  id          Int         @id @default(autoincrement())
+  customerId  Int
+  paymentId   Int?        @unique
+  quantity    Int
+  total       Int
+  status      String
+  createdAt   DateTime    @default(now())
+  customer    Customer    @relation(fields: [customerId], references: [id])
+  payment     Payment?   
+  shipment    Shipment?
+  productTransactions ProductTransaction[]
+}
+
+model Shipment {
+  id             Int          @id @default(autoincrement())
+  transactionId  Int          @unique
+  address        String
+  city           String
+  state          String
+  postalCode     String
+  country        String
+  status         String       @default("PENDING")
+  transaction    Transaction  @relation(fields: [transactionId], references: [id])
+}
+
+model ProductTransaction {
+  id            Int          @id @default(autoincrement())
+  productId     Int
+  transactionId Int
+  product       Product      @relation(fields: [productId], references: [id])
+  transaction   Transaction  @relation(fields: [transactionId], references: [id])
+  quantity      Int
 }
