@@ -1,14 +1,87 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
 
 generator client {
   provider = "prisma-client-js"
 }
 
-datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+model Product {
+  id                Int          @id @default(autoincrement())
+  name              String
+  shortDescription  String
+  description       String
+  price             Int
+  stock             Int
+  imageUrl          String
+  imageAltText      String
+  slug              String       @unique
+  images            Image[]
+  isFeatured        Boolean
+  productTransactions ProductTransaction[]
+}
+
+model Image {
+  id         Int      @id @default(autoincrement())
+  url        String
+  altText    String
+  productId  Int
+  product    Product  @relation(fields: [productId], references: [id])
+}
+
+model Customer {
+  id         Int           @id @default(autoincrement())
+  name       String
+  email      String        @unique
+  transactions Transaction[]
+}
+
+model Payment {
+  id                    Int           @id @default(autoincrement())
+  amount                Int
+  reference             String
+  currency              String
+  status                String
+  transactionId         Int           @unique
+  transaction           Transaction   @relation(fields: [transactionId], references: [id])
+  wompiTransactionId    String?       
+  token                 String?       
+  type                  String?       
+  installments          Int?       
+}
+
+model Transaction {
+  id          Int         @id @default(autoincrement())
+  customerId  Int
+  paymentId   Int?        @unique
+  quantity    Int
+  total       Int
+  status      String
+  createdAt   DateTime    @default(now())
+  customer    Customer    @relation(fields: [customerId], references: [id])
+  payment     Payment?   
+  shipment    Shipment?
+  productTransactions ProductTransaction[]
+}
+
+model Shipment {
+  id             Int          @id @default(autoincrement())
+  transactionId  Int          @unique
+  address        String
+  city           String
+  state          String
+  postalCode     String
+  country        String
+  status         String       @default("PENDING")
+  transaction    Transaction  @relation(fields: [transactionId], references: [id])
+}
+
+model ProductTransaction {
+  id            Int          @id @default(autoincrement())
+  productId     Int
+  transactionId Int
+  product       Product      @relation(fields: [productId], references: [id])
+  transaction   Transaction  @relation(fields: [transactionId], references: [id])
+  quantity      Int
 }
