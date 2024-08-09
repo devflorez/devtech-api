@@ -1,4 +1,4 @@
-import { Shipment } from "src/domain/entities/shipment.entity";
+import { Shipment, ShipmentDto } from "src/domain/entities/shipment.entity";
 export interface ShipmentPort {
-  createShipment(shipment: Shipment): Promise<Shipment>;
+  createShipment(shipment: ShipmentDto): Promise<Shipment>;
 }

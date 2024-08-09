@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
-import { Customer } from 'src/domain/entities/customer.entity';
+import { Customer, CustomerDto } from 'src/domain/entities/customer.entity';
 import { CustomerRepository } from 'src/domain/repositories/customer.repository';
 import { CustomerPort } from 'src/application/ports/customer.port';
 
@@ -10,7 +10,7 @@ export class PrismaCustomerRepository
 {
   constructor(private readonly prisma: PrismaClient) {}
 
-  async createCustomer(customer: Customer): Promise<Customer> {
+  async createCustomer(customer: CustomerDto): Promise<Customer> {
     const createdCustomer = await this.prisma.customer.create({
       data: {
         name: customer.name,

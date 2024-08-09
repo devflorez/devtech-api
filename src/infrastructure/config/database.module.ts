@@ -5,8 +5,10 @@ import { PrismaPaymentRepository } from '../adapters/repositories/prisma-payment
 import { PrismaTransactionRepository } from '../adapters/repositories/prisma-transaction.repository';
 import { PrismaShipmentRepository } from '../adapters/repositories/prisma-shipment.repository';
 import { PrismaCustomerRepository } from '../adapters/repositories/prisma-customer.repository';
+import { HttpModule } from '@nestjs/axios';
 
 @Module({
+  imports: [HttpModule],
   providers: [
     PrismaClient,
     {
@@ -29,6 +31,7 @@ import { PrismaCustomerRepository } from '../adapters/repositories/prisma-custom
       provide: 'CustomerPort',
       useClass: PrismaCustomerRepository,
     },
+
   ],
   exports: [
     'ProductPort',

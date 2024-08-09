@@ -7,12 +7,16 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiResponse, ApiBody } from '@nestjs/swagger';
 import { GetTransactionByIdUseCase } from 'src/application/use-cases/get-transaction-by-id.use-case';
 import { CreateTransactionUseCase } from 'src/application/use-cases/create-transaction.use-case';
 import { UpdateTransactionStatusUseCase } from 'src/application/use-cases/update-transaction-status.use-case';
-import { Transaction } from 'src/domain/entities/transaction.entity';
-
+import {
+  Transaction,
+  TransactionBodyDto,
+} from 'src/domain/entities/transaction.entity';
+import { CustomerDto } from 'src/domain/entities/customer.entity';
+import { ProductTransactionDto } from 'src/domain/entities/product-transaction.entity';
 
 @ApiTags('transactions')
 @Controller('transactions')
@@ -69,30 +73,13 @@ export class TransactionController {
       ],
     },
   })
+
+  @ApiBody({ type: TransactionBodyDto })
   async createTransaction(
     @Body()
-    transactionData: {
-      customer: { name: string; email: string };
-      transaction: {
-        productTransactions: { productId: number; quantity: number }[];
-        total: number;
-      };
-      payment: { amount: number; currency: string };
-      shipment: {
-        address: string;
-        city: string;
-        postalCode: string;
-        country: string;
-        state: string;
-      };
-    },
+    transactionData: TransactionBodyDto,
   ): Promise<Transaction> {
-    return this.createTransactionUseCase.execute(
-      transactionData.customer,
-      transactionData.transaction,
-      transactionData.payment,
-      transactionData.shipment,
-    );
+    return this.createTransactionUseCase.execute(transactionData);
   }
 
   @Version('1')

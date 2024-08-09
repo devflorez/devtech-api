@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
 
-import { Shipment } from 'src/domain/entities/shipment.entity';
+import { Shipment, ShipmentDto } from 'src/domain/entities/shipment.entity';
 import { ShipmentRepository } from 'src/domain/repositories/shipment.repository';
 import { ShipmentPort } from 'src/application/ports/shipment.port';
 
@@ -11,7 +11,7 @@ export class PrismaShipmentRepository
 {
   constructor(private readonly prisma: PrismaClient) {}
 
-  async createShipment(shipment: Shipment): Promise<Shipment> {
+  async createShipment(shipment: ShipmentDto): Promise<Shipment> {
     const createdShipment = await this.prisma.shipment.create({
       data: {
         transactionId: shipment.transactionId,
