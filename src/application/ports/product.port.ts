@@ -7,5 +7,11 @@ export interface ProductPort {
     search?: string,
   ): Promise<{ products: Product[]; total: number }>;
   getProductBySlug(slug: string): Promise<Product | null>;
+  getProductById(id: number): Promise<Product | null>;
   getFeaturedProducts(): Promise<Product[]>;
+  updateStockProduct(
+    productId: number,
+    quantity: number,
+    type: 'increment' | 'decrement',
+  ): Promise<Product>;
 }

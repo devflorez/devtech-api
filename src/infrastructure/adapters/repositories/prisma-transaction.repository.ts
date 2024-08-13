@@ -1,9 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
 
-import { Transaction } from 'src/domain/entities/transaction.entity';
-import { TransactionRepository } from 'src/domain/repositories/transaction.repository';
-import { TransactionPort } from 'src/application/ports/transaction.port';
+import {
+  Transaction,
+  TransactionDto,
+} from '../../../domain/entities/transaction.entity';
+import { TransactionRepository } from '../../../domain/repositories/transaction.repository';
+import { TransactionPort } from '../../../application/ports/transaction.port';
 
 @Injectable()
 export class PrismaTransactionRepository
@@ -11,18 +14,21 @@ export class PrismaTransactionRepository
 {
   constructor(private readonly prisma: PrismaClient) {}
 
-  async createTransaction(transaction: Transaction): Promise<Transaction> {
+  async createTransaction(transaction: TransactionDto): Promise<Transaction> {
     const createdTransaction = await this.prisma.transaction.create({
       data: {
         customerId: transaction.customerId,
         total: transaction.total,
-        status: transaction.status,
+        status: 'PENDING',
         productTransactions: {
           createMany: {
             data: transaction.productTransactions,
           },
         },
-        quantity: transaction.quantity,
+        quantity: transaction.productTransactions.reduce(
+          (acc, pt) => acc + pt.quantity,
+          0,
+        ),
       },
       include: {
         productTransactions: true,
@@ -30,6 +36,7 @@ export class PrismaTransactionRepository
     });
 
     return new Transaction(
+      createdTransaction.id,
       createdTransaction.customerId,
       createdTransaction.quantity,
       createdTransaction.total,
@@ -54,6 +61,7 @@ export class PrismaTransactionRepository
     }
 
     return new Transaction(
+      transaction.id,
       transaction.customerId,
       transaction.quantity,
       transaction.total,
@@ -78,6 +86,7 @@ export class PrismaTransactionRepository
     });
 
     return new Transaction(
+      updatedTransaction.id,
       updatedTransaction.customerId,
       updatedTransaction.quantity,
       updatedTransaction.total,

@@ -1,82 +1,45 @@
+import { TransactionBodyDto } from './../../domain/entities/transaction.entity';
 import { TransactionPort } from '../ports/transaction.port';
 import { CustomerPort } from '../ports/customer.port';
-import { PaymentPort } from '../ports/payment.port';
 import { ShipmentPort } from '../ports/shipment.port';
 import { Transaction } from '../../domain/entities/transaction.entity';
-import { Customer } from '../../domain/entities/customer.entity';
-import { Payment } from '../../domain/entities/payment.entity';
-import { Shipment } from '../../domain/entities/shipment.entity';
 
 export class CreateTransactionUseCase {
   constructor(
     private customerPort: CustomerPort,
     private transactionPort: TransactionPort,
-    private paymentPort: PaymentPort,
     private shipmentPort: ShipmentPort,
   ) {}
 
-  async execute(
-    customerData: { name: string; email: string },
-    transactionData: {
-      productTransactions: { productId: number; quantity: number }[];
-      total: number;
-    },
-    paymentData: { amount: number; currency: string },
-    shipmentData: {
-      address: string;
-      city: string;
-      postalCode: string;
-      country: string;
-      state: string;
-    },
-  ): Promise<Transaction> {
+  async execute(transactionBodyDto: TransactionBodyDto): Promise<Transaction> {
     let customer = await this.customerPort.findCustomerByEmail(
-      customerData.email,
+      transactionBodyDto.customer.email,
     );
     if (!customer) {
       customer = await this.customerPort.createCustomer(
-        new Customer(0, customerData.name, customerData.email),
+        transactionBodyDto.customer,
       );
     }
 
-    const transaction = new Transaction(
-      customer.id,
-      transactionData.productTransactions.reduce(
-        (sum, pt) => sum + pt.quantity,
-        0,
-      ),
-      transactionData.total,
-      'PENDING',
-      transactionData.productTransactions.map((pt) => ({
-        productId: pt.productId,
-        quantity: pt.quantity,
-      })),
-    );
 
-    const createdTransaction =
-      await this.transactionPort.createTransaction(transaction);
+    const createdTransaction = await this.transactionPort.createTransaction({
+      customerId: customer.id,
+      productTransactions: transactionBodyDto.productTransactions,
+      total: transactionBodyDto.total,
+    });
 
-    const payment = new Payment(
-      paymentData.amount,
-      paymentData.currency,
-      createdTransaction.id,
-      'PENDING',
-      new Date().toISOString() + Math.random().toString(36).substring(7) +  createdTransaction.id,
-    );
 
-    await this.paymentPort.createPayment(payment);
+    const { shipment } = transactionBodyDto;
 
-    const shipment = new Shipment(
-      createdTransaction.id,
-      shipmentData.address,
-      shipmentData.city,
-      shipmentData.state,
-      shipmentData.country,
-      shipmentData.postalCode,
-      'PENDING',
-    );
-
-    await this.shipmentPort.createShipment(shipment);
+    await this.shipmentPort.createShipment({
+      address: shipment.address,
+      city: shipment.city,
+      state: shipment.state,
+      country: shipment.country,
+      postalCode: shipment.postalCode,
+      transactionId: createdTransaction.id,
+      status: 'PENDING',
+    });
 
     return createdTransaction;
   }

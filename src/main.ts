@@ -7,7 +7,11 @@ async function bootstrap() {
   app.setGlobalPrefix('api');
   app.enableVersioning();
   app.enableCors({
-    origin: ['http://localhost:3000', 'http://localhost:3001'],
+    origin: [
+      'http://localhost:3000',
+      'http://localhost:3001',
+      'https://develop.d3vjxvzp7bzyml.amplifyapp.com',
+    ],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   });
   const config = new DocumentBuilder()

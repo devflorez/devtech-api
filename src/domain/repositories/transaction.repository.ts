@@ -1,7 +1,7 @@
-import { Transaction } from '../entities/transaction.entity';
+import { Transaction, TransactionDto } from '../entities/transaction.entity';
 
 export interface TransactionRepository {
-  createTransaction(transaction: Transaction): Promise<Transaction>;
+  createTransaction(transaction: TransactionDto): Promise<Transaction>;
   updateTransactionStatus(id: number, status: string): Promise<Transaction>;
   getTransactionById(id: number): Promise<Transaction | null>;
 }
