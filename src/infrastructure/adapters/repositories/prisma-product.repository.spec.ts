@@ -113,6 +113,14 @@ describe('PrismaProductRepository', () => {
       imageAltText: 'imageAltText1',
       slug: 'slug1',
       isFeatured: true,
+      images: [
+        {
+          id: 1,
+          url: 'url1',
+          altText: 'altText1',
+          productId: 1,
+        },
+      ],
     };
 
     mockPrismaClient.product.findUnique.mockResolvedValue(product);
@@ -131,10 +139,20 @@ describe('PrismaProductRepository', () => {
         product.imageAltText,
         product.slug,
         product.isFeatured,
+        product.images.map((image) => ({
+          id: image.id,
+          url: image.url,
+          altText: image.altText,
+          productId: image.productId,
+        })),
       ),
     );
+
     expect(prisma.product.findUnique).toHaveBeenCalledWith({
       where: { slug: 'slug1' },
+      include: {
+        images: true,
+      },
     });
   });
 

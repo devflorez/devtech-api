@@ -4,10 +4,9 @@ import { PrismaClient } from '@prisma/client';
 import {
   Transaction,
   TransactionDto,
-} from 'src/domain/entities/transaction.entity';
-import { TransactionRepository } from 'src/domain/repositories/transaction.repository';
-import { TransactionPort } from 'src/application/ports/transaction.port';
-import { PrismaCustomerRepository } from './prisma-customer.repository';
+} from '../../../domain/entities/transaction.entity';
+import { TransactionRepository } from '../../../domain/repositories/transaction.repository';
+import { TransactionPort } from '../../../application/ports/transaction.port';
 
 @Injectable()
 export class PrismaTransactionRepository

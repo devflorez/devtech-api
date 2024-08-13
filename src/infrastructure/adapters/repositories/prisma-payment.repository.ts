@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
-import { Payment, PaymentDto } from 'src/domain/entities/payment.entity';
-import { PaymentRepository } from 'src/domain/repositories/payment.repository';
-import { PaymentPort } from 'src/application/ports/payment.port';
-import { Token } from 'src/domain/entities/token.entity';
-import { Card } from 'src/domain/entities/card.entity';
+import { Payment, PaymentDto } from '../../../domain/entities/payment.entity';
+import { PaymentRepository } from '../../../domain/repositories/payment.repository';
+import { PaymentPort } from '../../../application/ports/payment.port';
+import { Token } from '../../../domain/entities/token.entity';
+import { Card } from '../../../domain/entities/card.entity';
 import { HttpService } from '@nestjs/axios';
 import { ConfigService } from '@nestjs/config';
 import {

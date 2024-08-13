@@ -1,8 +1,11 @@
 import { Body, Controller, Post, Version } from '@nestjs/common';
 
 import { ApiTags, ApiOperation, ApiResponse, ApiBody } from '@nestjs/swagger';
-import { HandleWompiEventUseCase } from 'src/application/use-cases/handle-wompi-event.use.case';
-import { EventWompi, ResponseWompi } from 'src/domain/entities/webhook.entity';
+import { HandleWompiEventUseCase } from '../../../application/use-cases/handle-wompi-event.use.case';
+import {
+  EventWompi,
+  ResponseWompi,
+} from '../../../domain/entities/webhook.entity';
 
 @ApiTags('webhooks')
 @Controller('webhooks')

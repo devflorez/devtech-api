@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
-import { Customer, CustomerDto } from 'src/domain/entities/customer.entity';
-import { CustomerRepository } from 'src/domain/repositories/customer.repository';
-import { CustomerPort } from 'src/application/ports/customer.port';
+import { Customer, CustomerDto } from '../../../domain/entities/customer.entity';
+import { CustomerRepository } from '../../../domain/repositories/customer.repository';
+import { CustomerPort } from '../../../application/ports/customer.port';
 
 @Injectable()
 export class PrismaCustomerRepository

@@ -3,12 +3,15 @@ import { Controller, Version, Body, Post, Get } from '@nestjs/common';
 
 import { ApiTags, ApiOperation, ApiResponse, ApiBody } from '@nestjs/swagger';
 
-import { Payment, PaymentBodyDto } from 'src/domain/entities/payment.entity';
-import { CreateTokenCardUseCase } from 'src/application/use-cases/create-token-card.use.case';
-import { Card, CardDto } from 'src/domain/entities/card.entity';
-import { Token } from 'src/domain/entities/token.entity';
-import { Acceptance } from 'src/domain/entities/acceptance.entity';
-import { GetAcceptanceTokenUseCase } from 'src/application/use-cases/get-acceptance-token.use.case';
+import {
+  Payment,
+  PaymentBodyDto,
+} from '../../../domain/entities/payment.entity';
+import { CreateTokenCardUseCase } from '../../../application/use-cases/create-token-card.use.case';
+import { Card, CardDto } from '../../../domain/entities/card.entity';
+import { Token } from '../../../domain/entities/token.entity';
+import { Acceptance } from '../../../domain/entities/acceptance.entity';
+import { GetAcceptanceTokenUseCase } from '../../../application/use-cases/get-acceptance-token.use.case';
 
 @ApiTags('payments')
 @Controller('payments')
@@ -18,7 +21,7 @@ export class PaymentController {
     private readonly getAcceptanceTokenUseCase: GetAcceptanceTokenUseCase,
     private readonly createPaymentUseCase: CreatePaymentUseCase,
   ) {}
-  
+
   @Version('1')
   @Post()
   @ApiOperation({ summary: 'Create payment' })
@@ -44,7 +47,7 @@ export class PaymentController {
     status: 201,
     description: 'Return created token card',
     example: {
-      id: 'tok_prod_1_BBb749EAB32e97a2D058Dd538a608301', // TOKEN que debe ser usado para crear la transacción
+      id: 'tok_prod_1_BBb749EAB32e97a2D058Dd538a608301',
       created_at: '2020-01-02T18:52:35.850+00:00',
       brand: 'VISA',
       name: 'VISA-4242',
@@ -71,8 +74,6 @@ export class PaymentController {
     status: 200,
     description: 'Return acceptance token',
     example: {
-      // Otros datos del comercio...
-
       acceptance_token:
         'eyJhbGciOiJIUzI1NiJ9.eyJjb250cmFjdF9pZCI6MSwicGVybWFsaW5rIjoiaHR0cHM6Ly93b21waS5jby93cC1jb250ZW50L3VwbG9hZHMvMjAxOS8wOS9URVJNSU5PUy1ZLUNPTkRJQ0lPTkVTLURFLVVTTy1VU1VBUklPUy1XT01QSS5wZGYiLCJmaWxlX2hhc2giOiIzZGNkMGM5OGU3NGFhYjk3OTdjZmY3ODExNzMxZjc3YiIsImppdCI6IjE1ODEwOTIzNjItMzk1NDkiLCJleHAiOjE1ODEwOTU5NjJ9.JwGfnfXsP9fbyOiQXFtQ_7T4r-tjvQrkFx0NyfIED5s',
       permalink:

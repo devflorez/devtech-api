@@ -1,9 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
 
-import { Shipment, ShipmentDto } from 'src/domain/entities/shipment.entity';
-import { ShipmentRepository } from 'src/domain/repositories/shipment.repository';
-import { ShipmentPort } from 'src/application/ports/shipment.port';
+import {
+  Shipment,
+  ShipmentDto,
+} from '../../../domain/entities/shipment.entity';
+import { ShipmentRepository } from '../../../domain/repositories/shipment.repository';
+import { ShipmentPort } from '../../../application/ports/shipment.port';
 
 @Injectable()
 export class PrismaShipmentRepository
@@ -34,8 +37,9 @@ export class PrismaShipmentRepository
     );
   }
 
-
-  async getShipmentByTransactionId(transactionId: number): Promise<Shipment | null> {
+  async getShipmentByTransactionId(
+    transactionId: number,
+  ): Promise<Shipment | null> {
     const shipment = await this.prisma.shipment.findUnique({
       where: { transactionId },
     });

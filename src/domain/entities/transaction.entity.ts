@@ -1,12 +1,5 @@
-import {
-  ProductTransactionDto,
-} from './product-transaction.entity';
-import {
-  IsArray,
-  IsNotEmpty,
-  IsNumber,
-  ValidateNested,
-} from 'class-validator';
+import { ProductTransactionDto } from './product-transaction.entity';
+import { IsArray, IsNotEmpty, IsNumber, ValidateNested } from 'class-validator';
 import { CustomerDto } from './customer.entity';
 import { Type } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
@@ -22,8 +15,7 @@ export class TransactionBodyDto {
       phoneNumber: '3012345678',
     },
   })
-  customer: CustomerDto
-
+  customer: CustomerDto;
 
   @ValidateNested({ each: true })
   @Type(() => ProductTransactionDto)
@@ -32,11 +24,11 @@ export class TransactionBodyDto {
     example: [
       {
         productId: 1,
-        quantity: 1
-      }
-    ]
+        quantity: 1,
+      },
+    ],
   })
-  productTransactions: ProductTransactionDto[]
+  productTransactions: ProductTransactionDto[];
 
   @ValidateNested({ each: true })
   @Type(() => ShipmentBodyDto)
@@ -49,20 +41,19 @@ export class TransactionBodyDto {
       country: 'USA',
     },
   })
-  shipment: ShipmentBodyDto
-
+  shipment: ShipmentBodyDto;
 
   @IsNumber()
   @IsNotEmpty()
   total: number;
-} 
+}
 
 export class TransactionDto {
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => ProductTransactionDto)
-  productTransactions: ProductTransactionDto[]
-  
+  productTransactions: ProductTransactionDto[];
+
   @IsNumber()
   @IsNotEmpty()
   @ApiProperty({
@@ -70,15 +61,14 @@ export class TransactionDto {
   })
   customerId: number;
 
-
   @IsNumber()
   @IsNotEmpty()
   total: number;
 }
 
 export class Transaction {
-
-  constructor(    public id: number,
+  constructor(
+    public id: number,
     public customerId: number,
     public quantity: number,
     public total: number,

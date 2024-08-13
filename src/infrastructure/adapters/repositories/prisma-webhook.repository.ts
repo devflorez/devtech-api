@@ -1,9 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
 
-import { EventWompi, ResponseWompi } from 'src/domain/entities/webhook.entity';
-import { WebhookRepository } from 'src/domain/repositories/webhook.repository';
-import { WebhookPort } from 'src/application/ports/webhook.port';
+import {
+  EventWompi,
+  ResponseWompi,
+} from '../../../domain/entities/webhook.entity';
+import { WebhookRepository } from '../../../domain/repositories/webhook.repository';
+import { WebhookPort } from '../../../application/ports/webhook.port';
 
 @Injectable()
 export class PrismaWebhookRepository implements WebhookRepository, WebhookPort {

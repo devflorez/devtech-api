@@ -8,13 +8,13 @@ import {
   Post,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiBody } from '@nestjs/swagger';
-import { GetTransactionByIdUseCase } from 'src/application/use-cases/get-transaction-by-id.use-case';
-import { CreateTransactionUseCase } from 'src/application/use-cases/create-transaction.use-case';
-import { UpdateTransactionStatusUseCase } from 'src/application/use-cases/update-transaction-status.use-case';
+import { GetTransactionByIdUseCase } from '../../../application/use-cases/get-transaction-by-id.use-case';
+import { CreateTransactionUseCase } from '../../../application/use-cases/create-transaction.use-case';
+import { UpdateTransactionStatusUseCase } from '../../../application/use-cases/update-transaction-status.use-case';
 import {
   Transaction,
   TransactionBodyDto,
-} from 'src/domain/entities/transaction.entity';
+} from '../../../domain/entities/transaction.entity';
 
 @ApiTags('transactions')
 @Controller('transactions')
@@ -71,7 +71,6 @@ export class TransactionController {
       ],
     },
   })
-
   @ApiBody({ type: TransactionBodyDto })
   async createTransaction(
     @Body()
