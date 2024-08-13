@@ -15,6 +15,7 @@ export class PrismaCustomerRepository
       data: {
         name: customer.name,
         email: customer.email,
+        phoneNumber: customer.phoneNumber,
       },
     });
 
@@ -22,6 +23,7 @@ export class PrismaCustomerRepository
       createdCustomer.id,
       createdCustomer.name,
       createdCustomer.email,
+      createdCustomer.phoneNumber,
     );
   }
 
@@ -34,6 +36,28 @@ export class PrismaCustomerRepository
       return null;
     }
 
-    return new Customer(customer.id, customer.name, customer.email);
+    return new Customer(
+      customer.id,
+      customer.name,
+      customer.email,
+      customer.phoneNumber,
+    );
+  }
+
+  async findCustomerById(id: number): Promise<Customer | null> {
+    const customer = await this.prisma.customer.findUnique({
+      where: { id },
+    });
+
+    if (!customer) {
+      return null;
+    }
+
+    return new Customer(
+      customer.id,
+      customer.name,
+      customer.email,
+      customer.phoneNumber,
+    );
   }
 }

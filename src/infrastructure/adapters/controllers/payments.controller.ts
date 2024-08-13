@@ -1,8 +1,9 @@
+import { CreatePaymentUseCase } from './../../../application/use-cases/create-payment.use.case';
 import { Controller, Version, Body, Post, Get } from '@nestjs/common';
 
 import { ApiTags, ApiOperation, ApiResponse, ApiBody } from '@nestjs/swagger';
 
-import { Payment } from 'src/domain/entities/payment.entity';
+import { Payment, PaymentBodyDto } from 'src/domain/entities/payment.entity';
 import { CreateTokenCardUseCase } from 'src/application/use-cases/create-token-card.use.case';
 import { Card, CardDto } from 'src/domain/entities/card.entity';
 import { Token } from 'src/domain/entities/token.entity';
@@ -15,8 +16,9 @@ export class PaymentController {
   constructor(
     private readonly createTokenCardUseCase: CreateTokenCardUseCase,
     private readonly getAcceptanceTokenUseCase: GetAcceptanceTokenUseCase,
+    private readonly createPaymentUseCase: CreatePaymentUseCase,
   ) {}
-  /*
+  
   @Version('1')
   @Post()
   @ApiOperation({ summary: 'Create payment' })
@@ -30,10 +32,10 @@ export class PaymentController {
       status: 'pending',
     },
   })
-  async createPayment(@Body() payment: Payment): Promise<Payment> {
-    return this.wompiPaymentService.createPayment(payment);
+  @ApiBody({ type: PaymentBodyDto })
+  async createPayment(@Body() payment: PaymentBodyDto): Promise<Payment> {
+    return this.createPaymentUseCase.execute(payment);
   }
-    */
 
   @Version('1')
   @Post('token')

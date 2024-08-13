@@ -33,4 +33,25 @@ export class PrismaShipmentRepository
       createdShipment.status,
     );
   }
+
+
+  async getShipmentByTransactionId(transactionId: number): Promise<Shipment | null> {
+    const shipment = await this.prisma.shipment.findUnique({
+      where: { transactionId },
+    });
+
+    if (!shipment) {
+      return null;
+    }
+
+    return new Shipment(
+      shipment.transactionId,
+      shipment.address,
+      shipment.city,
+      shipment.postalCode,
+      shipment.country,
+      shipment.state,
+      shipment.status,
+    );
+  }
 }

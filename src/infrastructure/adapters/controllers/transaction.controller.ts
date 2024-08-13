@@ -15,8 +15,6 @@ import {
   Transaction,
   TransactionBodyDto,
 } from 'src/domain/entities/transaction.entity';
-import { CustomerDto } from 'src/domain/entities/customer.entity';
-import { ProductTransactionDto } from 'src/domain/entities/product-transaction.entity';
 
 @ApiTags('transactions')
 @Controller('transactions')

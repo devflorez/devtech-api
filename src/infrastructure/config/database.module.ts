@@ -6,6 +6,7 @@ import { PrismaTransactionRepository } from '../adapters/repositories/prisma-tra
 import { PrismaShipmentRepository } from '../adapters/repositories/prisma-shipment.repository';
 import { PrismaCustomerRepository } from '../adapters/repositories/prisma-customer.repository';
 import { HttpModule } from '@nestjs/axios';
+import { PrismaWebhookRepository } from '../adapters/repositories/prisma-webhook.repository';
 
 @Module({
   imports: [HttpModule],
@@ -31,7 +32,10 @@ import { HttpModule } from '@nestjs/axios';
       provide: 'CustomerPort',
       useClass: PrismaCustomerRepository,
     },
-
+    {
+      provide: 'WebhookPort',
+      useClass: PrismaWebhookRepository,
+    },
   ],
   exports: [
     'ProductPort',
@@ -39,6 +43,7 @@ import { HttpModule } from '@nestjs/axios';
     'TransactionPort',
     'ShipmentPort',
     'CustomerPort',
+    'WebhookPort',
   ],
 })
 export class DatabaseModule {}

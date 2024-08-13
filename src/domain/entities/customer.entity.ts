@@ -25,6 +25,13 @@ export class CustomerDto {
     example: 'me@emaill.com',
   })
   email: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @ApiProperty({
+    example: '3012345678',
+  })
+  phoneNumber: string;
 }
 
 export class Customer {
@@ -32,5 +39,6 @@ export class Customer {
     public id: number,
     public name: string,
     public email: string,
+    public phoneNumber: string,
   ) {}
 }

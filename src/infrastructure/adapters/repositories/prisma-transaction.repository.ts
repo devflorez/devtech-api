@@ -37,6 +37,7 @@ export class PrismaTransactionRepository
     });
 
     return new Transaction(
+      createdTransaction.id,
       createdTransaction.customerId,
       createdTransaction.quantity,
       createdTransaction.total,
@@ -61,6 +62,7 @@ export class PrismaTransactionRepository
     }
 
     return new Transaction(
+      transaction.id,
       transaction.customerId,
       transaction.quantity,
       transaction.total,
@@ -85,6 +87,7 @@ export class PrismaTransactionRepository
     });
 
     return new Transaction(
+      updatedTransaction.id,
       updatedTransaction.customerId,
       updatedTransaction.quantity,
       updatedTransaction.total,

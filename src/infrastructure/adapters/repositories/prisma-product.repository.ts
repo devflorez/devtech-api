@@ -100,4 +100,50 @@ export class PrismaProductRepository implements ProductRepository, ProductPort {
         ),
     );
   }
+
+  async getProductById(id: number): Promise<Product | null> {
+    const product = await this.prisma.product.findUnique({
+      where: { id },
+    });
+
+    if (!product) return null;
+    return new Product(
+      product.id,
+      product.name,
+      product.shortDescription,
+      product.description,
+      product.price,
+      product.stock,
+      product.imageUrl,
+      product.imageAltText,
+      product.slug,
+      product.isFeatured,
+    );
+  }
+
+  async updateStockProduct(
+    productId: number,
+    quantity: number,
+    type: 'increment' | 'decrement' = 'increment',
+  ): Promise<Product> {
+    const product = await this.prisma.product.findUnique({
+      where: { id: productId },
+    });
+
+    if (!product) return null;
+
+    const newStock =
+      type === 'increment'
+        ? product.stock + quantity
+        : product.stock - quantity;
+
+    if (newStock < 0) {
+      throw new Error('Stock cannot be negative');
+    }
+
+    return this.prisma.product.update({
+      where: { id: productId },
+      data: { stock: newStock },
+    });
+  }
 }

@@ -1,15 +1,12 @@
 import {
-  ProductTransaction,
   ProductTransactionDto,
 } from './product-transaction.entity';
 import {
   IsArray,
   IsNotEmpty,
   IsNumber,
-  IsString,
   ValidateNested,
 } from 'class-validator';
-import { ShipmentDto } from './shipment.entity';
 import { CustomerDto } from './customer.entity';
 import { Type } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
@@ -21,7 +18,8 @@ export class TransactionBodyDto {
   @ApiProperty({
     example: {
       name: 'John Doe',
-      email: 'me@email.com'
+      email: 'me@email.com',
+      phoneNumber: '3012345678',
     },
   })
   customer: CustomerDto
@@ -79,8 +77,8 @@ export class TransactionDto {
 }
 
 export class Transaction {
-  id: number;
-  constructor(
+
+  constructor(    public id: number,
     public customerId: number,
     public quantity: number,
     public total: number,
