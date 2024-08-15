@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Version } from '@nestjs/common';
+import { Body, Controller, HttpCode, Post, Version } from '@nestjs/common';
 
 import { ApiTags, ApiOperation, ApiResponse, ApiBody } from '@nestjs/swagger';
 import { HandleWompiEventUseCase } from '../../../application/use-cases/handle-wompi-event.use.case';
@@ -26,6 +26,7 @@ export class WebhookController {
       message: 'Event handled',
     },
   })
+  @HttpCode(200)
   async handleWompiEvent(@Body() event: EventWompi): Promise<ResponseWompi> {
     return this.handleWompiEventUseCase.execute(event);
   }
