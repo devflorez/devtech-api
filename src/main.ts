@@ -11,6 +11,7 @@ async function bootstrap() {
       'http://localhost:3000',
       'http://localhost:3001',
       'https://develop.d3vjxvzp7bzyml.amplifyapp.com',
+      'devtech-front-two.vercel.app',
     ],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   });
@@ -21,6 +22,7 @@ async function bootstrap() {
     .addTag('products', 'Operaciones relacionadas con productos')
     .addTag('transactions', 'Operaciones relacionadas con transacciones')
     .addTag('payments', 'Operaciones relacionadas con pagos')
+    .addTag('webhooks', 'Operaciones relacionadas con webhooks')
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api/docs', app, document);

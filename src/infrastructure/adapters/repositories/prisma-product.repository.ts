@@ -132,13 +132,13 @@ export class PrismaProductRepository implements ProductRepository, ProductPort {
 
     if (!product) return null;
 
-    const newStock =
+    let newStock =
       type === 'increment'
         ? product.stock + quantity
         : product.stock - quantity;
 
     if (newStock < 0) {
-      throw new Error('Stock cannot be negative');
+      newStock = 0;
     }
 
     return this.prisma.product.update({
