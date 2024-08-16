@@ -18,7 +18,7 @@ async function bootstrap() {
   const config = new DocumentBuilder()
     .setTitle('DevTech API')
     .setDescription('API para la tienda de tecnología DevTech')
-    .setVersion('1.0')
+    .setVersion('1.0.1')
     .addTag('products', 'Operaciones relacionadas con productos')
     .addTag('transactions', 'Operaciones relacionadas con transacciones')
     .addTag('payments', 'Operaciones relacionadas con pagos')
