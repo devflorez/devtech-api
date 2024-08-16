@@ -49,8 +49,16 @@ describe('PrismaTransactionRepository', () => {
       total: 100,
       status: 'PENDING',
       productTransactions: [
-        { productId: 1, quantity: 2 },
-        { productId: 2, quantity: 3 },
+        {
+          productId: 1,
+          quantity: 2,
+          product: { name: 'Product 1', imageUrl: 'image1.jpg', price: 10 },
+        },
+        {
+          productId: 2,
+          quantity: 3,
+          product: { name: 'Product 2', imageUrl: 'image2.jpg', price: 20 },
+        },
       ],
     };
 
@@ -74,7 +82,11 @@ describe('PrismaTransactionRepository', () => {
         ),
       },
       include: {
-        productTransactions: true,
+        productTransactions: {
+          include: {
+            product: true,
+          },
+        },
       },
     });
 
@@ -84,17 +96,25 @@ describe('PrismaTransactionRepository', () => {
   it('should get a transaction by id', async () => {
     const id = 1;
 
-    const transaction =  {
+    const transaction = {
       id: 1,
       customerId: 1,
       quantity: 5,
       total: 100,
       status: 'PENDING',
       productTransactions: [
-        { productId: 1, quantity: 2 },
-        { productId: 2, quantity: 3 },
+        {
+          productId: 1,
+          quantity: 2,
+          product: { name: 'Product 1', imageUrl: 'image1.jpg', price: 10 },
+        },
+        {
+          productId: 2,
+          quantity: 3,
+          product: { name: 'Product 2', imageUrl: 'image2.jpg', price: 20 },
+        },
       ],
-    }
+    };
 
     mockPrismaClient.transaction.findUnique.mockResolvedValue(transaction);
 
@@ -110,6 +130,11 @@ describe('PrismaTransactionRepository', () => {
         transaction.productTransactions.map((pt) => ({
           productId: pt.productId,
           quantity: pt.quantity,
+          product: {
+            name: pt.product.name,
+            imageUrl: pt.product.imageUrl,
+            price: pt.product.price,
+          },
         })),
       ),
     );
@@ -125,7 +150,11 @@ describe('PrismaTransactionRepository', () => {
     expect(mockPrismaClient.transaction.findUnique).toHaveBeenCalledWith({
       where: { id },
       include: {
-        productTransactions: true,
+        productTransactions: {
+          include: {
+            product: true,
+          },
+        },
       },
     });
 
@@ -143,8 +172,16 @@ describe('PrismaTransactionRepository', () => {
       total: 100,
       status: 'COMPLETED',
       productTransactions: [
-        { productId: 1, quantity: 2 },
-        { productId: 2, quantity: 3 },
+        {
+          productId: 1,
+          quantity: 2,
+          product: { name: 'Product 1', imageUrl: 'image1.jpg', price: 10 },
+        },
+        {
+          productId: 2,
+          quantity: 3,
+          product: { name: 'Product 2', imageUrl: 'image2.jpg', price: 20 },
+        },
       ],
     };
 
@@ -156,7 +193,11 @@ describe('PrismaTransactionRepository', () => {
       where: { id },
       data: { status },
       include: {
-        productTransactions: true,
+        productTransactions: {
+          include: {
+            product: true,
+          },
+        },
       },
     });
 

@@ -1,0 +1,104 @@
+doctype html
+html
+  head
+    meta(charset="UTF-8")
+    title ¡Transacción Exitosa!
+    style.
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        color: #333;
+        padding: 20px;
+      }
+      h1 {
+        color: #4CAF50;
+      }
+      h2 {
+        color: #333;
+        border-bottom: 2px solid #4CAF50;
+        padding-bottom: 5px;
+        margin-bottom: 15px;
+      }
+      p, ul {
+        line-height: 1.6;
+      }
+      ul {
+        list-style: none;
+        padding: 0;
+      }
+      li {
+        margin-bottom: 10px;
+      }
+      strong {
+        color: #4CAF50;
+      }
+      .product {
+        border: 1px solid #ddd;
+        padding: 10px;
+        margin-bottom: 15px;
+        background-color: #fff;
+      }
+      .product img {
+        display: block;
+        margin-bottom: 10px;
+      }
+      .total {
+        font-size: 1.5em;
+        color: #4CAF50;
+        margin-top: 20px;
+        border-top: 2px solid #ddd;
+        padding-top: 10px;
+      }
+  body
+    h1 ¡Gracias por tu compra, #{customer.name}!
+    p Nos complace informarte que tu transacción ha sido exitosa. Pronto estaremos enviando los productos a la dirección proporcionada.
+
+    h2 Información del Cliente
+    ul
+      li
+        strong Nombre: 
+        | #{customer.name}
+      li
+        strong Teléfono: 
+        | #{customer.phoneNumber}
+      li
+        strong Email: 
+        | #{customer.email}
+
+    h2 Información del Envío
+    ul
+      li
+        strong Dirección: 
+        | #{shipping.address}
+      li
+        strong Ciudad: 
+        | #{shipping.city}
+      li
+        strong Estado: 
+        | #{shipping.state}
+      li
+        strong Código Postal: 
+        | #{shipping.postalCode}
+      li
+        strong País: 
+        | #{shipping.country}
+      li
+        strong Estado del Envío: 
+        | En Proceso
+
+    h2 Detalles de la Compra
+    each product in products
+      .product
+        p
+          strong Producto: 
+          | #{product.name}
+        p
+          strong Precio: 
+          | $#{product.price}
+        p
+          strong Cantidad: 
+          | #{product.quantity}
+
+    p.total Total Pagado: #{totalPrice}
+
+    p Si tienes alguna pregunta o necesitas asistencia, no dudes en contactarnos. ¡Gracias por confiar en nosotros!

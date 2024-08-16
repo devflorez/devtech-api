@@ -57,6 +57,11 @@ describe('TransactionController', () => {
         {
           productId: 1,
           quantity: 1,
+          product: {
+            name: 'Product 1',
+            imageUrl: 'image1.jpg',
+            price: 199.99,
+          },
         },
       ],
       1,
@@ -99,6 +104,11 @@ describe('TransactionController', () => {
         {
           productId: 1,
           quantity: 1,
+          product: {
+            name: 'Product 1',
+            imageUrl: 'image1.jpg',
+            price: 100,
+          },
         },
       ],
     };
@@ -122,6 +132,11 @@ describe('TransactionController', () => {
         {
           productId: 1,
           quantity: 1,
+          product: {
+            name: 'Product 1',
+            imageUrl: 'image1.jpg',
+            price: 100,
+          }
         },
       ],
     };

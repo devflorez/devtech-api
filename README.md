@@ -2,25 +2,24 @@
 
 ## Descripción
 
-DevTech API es una aplicación para gestionar productos, clientes, transacciones y envíos, con integración para pagos a través de Wompi. La aplicación está construida utilizando NestJS y Prisma.
+evTech API es una aplicación diseñada para gestionar productos, clientes, transacciones y envíos, con integración de pagos a través de Wompi. La aplicación está construida utilizando NestJS y Prisma, y sigue un enfoque modular basado en la arquitectura hexagonal.
 
 [SWAGGER](https://devtech-api.onrender.com/api/docs)
 
 ## Estructura del Proyecto
-
-El proyecto sigue una arquitectura hexagonal, separando las preocupaciones de la lógica de negocio, la infraestructura y las interfaces.
+El proyecto sigue una arquitectura hexagonal, que separa las diferentes capas de la aplicación, permitiendo que la lógica de negocio sea independiente de la infraestructura y las interfaces externas. Esto facilita el mantenimiento y escalabilidad del proyecto.
 
 ### Directorios Principales
 
-- `src/application`: Contiene los casos de uso y puertos (interfaces).
+- `src/application`: Contiene los casos de uso y puertos (interfaces), encargados de orquestar la lógica de negocio.
 - `src/domain`: Define las entidades del dominio.
-- `src/infrastructure`: Contiene adaptadores y la configuración de infraestructura.
-- `src/infrastructure/adapters`: Implementaciones de los puertos, servicios de terceros y controladores.
+- `src/infrastructure`: Aloja los adaptadores, la configuración de infraestructura y las implementaciones concretas de los puertos.
+- `src/infrastructure/adapters`: Implementaciones de los puertos, servicios de terceros, y los controladores que manejan las solicitudes HTTP.
 - `src/infrastructure/config`: Configuraciones de módulos y bases de datos.
 
 ## Modelos de Prisma
 
-El esquema de Prisma define los modelos para productos, clientes, pagos, transacciones y envíos.
+El esquema de Prisma se utiliza para definir los modelos de la base de datos, que incluyen productos, clientes, pagos, transacciones y envíos. La base de datos utilizada es SQLite, lo que facilita el desarrollo y las pruebas locales.
 
 ```prisma
 datasource db {
@@ -59,6 +58,7 @@ model Customer {
   id         Int           @id @default(autoincrement())
   name       String
   email      String        @unique
+  phoneNumber String
   transactions Transaction[]
 }
 
@@ -70,10 +70,10 @@ model Payment {
   status                String
   transactionId         Int           @unique
   transaction           Transaction   @relation(fields: [transactionId], references: [id])
-  wompiTransactionId    String?       
-  token                 String?       
-  type                  String?       
-  installments          Int?       
+  wompiTransactionId    String?
+  token                 String?
+  type                  String?
+  installments          Int?
 }
 
 model Transaction {
@@ -85,7 +85,7 @@ model Transaction {
   status      String
   createdAt   DateTime    @default(now())
   customer    Customer    @relation(fields: [customerId], references: [id])
-  payment     Payment?   
+  payment     Payment?
   shipment    Shipment?
   productTransactions ProductTransaction[]
 }
@@ -111,16 +111,26 @@ model ProductTransaction {
   quantity      Int
 }
 
+
+model Event  {
+  id          Int          @id @default(autoincrement())
+  type        String
+  data        String
+}
 ```
 
 ## Instalación
  - Clona el repositorio
- - Instala las dependencias
- - Configura las variables de entorno
- - Ejecuta las migraciones de Prisma
- - Genera el cliente de Prisma
+ - Instala las dependencias con `yarn install`.
+ - Configura las variables de entorno según el archivo `.env.example`
+ - Ejecuta las migraciones de Prisma para crear la base de datos y las tablas necesarias: `npx prisma migrate dev`.
+ - Genera el cliente de Prisma: `npx prisma generate`.
 
 ## Uso
+Para iniciar la aplicación, ejecuta:
 ```
 npm run start
 ```
+
+## Test
+Todos los test han sido ejecutados y pasaron con éxito, cubriendo los casos de uso de cada una de las rutas y operaciones críticas de la API. Los tests validan la funcionalidad de los controladores y repositorios, asegurando que la lógica de negocio y la integración con la base de datos funcionen como se espera.
