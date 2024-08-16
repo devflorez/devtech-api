@@ -1,0 +1,121 @@
+doctype html
+html
+  head
+    meta(charset="UTF-8")
+    title ¡Transacción No Exitosa!
+    style.
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        color: #333;
+        padding: 20px;
+      }
+      h1 {
+        color: #e74c3c;
+      }
+      h2 {
+        color: #333;
+        border-bottom: 2px solid #e74c3c;
+        padding-bottom: 5px;
+        margin-bottom: 15px;
+      }
+      p, ul {
+        line-height: 1.6;
+      }
+      ul {
+        list-style: none;
+        padding: 0;
+      }
+      li {
+        margin-bottom: 10px;
+      }
+      strong {
+        color: #e74c3c;
+      }
+      .product {
+        border: 1px solid #ddd;
+        padding: 10px;
+        margin-bottom: 15px;
+        background-color: #fff;
+      }
+      .product img {
+        display: block;
+        margin-bottom: 10px;
+      }
+      .total {
+        font-size: 1.5em;
+        color: #e74c3c;
+        margin-top: 20px;
+        border-top: 2px solid #ddd;
+        padding-top: 10px;
+      }
+      .retry-button {
+        background-color: #e74c3c;
+        color: #fff;
+        padding: 10px 20px;
+        text-align: center;
+        display: inline-block;
+        margin-top: 20px;
+        text-decoration: none;
+        border-radius: 5px;
+      }
+      .retry-button:hover {
+        background-color: #c0392b;
+      }
+  body
+    h1 Lo sentimos, #{customer.name}
+    p Desafortunadamente, tu transacción no pudo ser completada. Por favor, revisa los detalles a continuación y vuelve a intentarlo.
+
+    h2 Información del Cliente
+    ul
+      li
+        strong Nombre: 
+        | #{customer.name}
+      li
+        strong Teléfono: 
+        | #{customer.phoneNumber}
+      li
+        strong Email: 
+        | #{customer.email}
+
+    h2 Información del Envío
+    ul
+      li
+        strong Dirección: 
+        | #{shipping.address}
+      li
+        strong Ciudad: 
+        | #{shipping.city}
+      li
+        strong Estado: 
+        | #{shipping.state}
+      li
+        strong Código Postal: 
+        | #{shipping.postalCode}
+      li
+        strong País: 
+        | #{shipping.country}
+      li
+        strong Estado del Envío: 
+        | PAGO RECHAZADO
+
+    h2 Detalles de la Compra
+    each product in products
+      .product
+ 
+        p
+          strong Producto: 
+          | #{product.name}
+        p
+          strong Precio: 
+          | $#{product.price}
+        p
+          strong Cantidad: 
+          | #{product.quantity}
+
+    p.total Total Intentado: #{totalPrice}
+
+    p Para completar tu compra, por favor vuelve a intentarlo haciendo clic en el siguiente enlace:
+    a.retry-button(href="https://devtech-front-two.vercel.app/") Reintentar Transacción
+
+    p Si tienes alguna pregunta o necesitas asistencia, no dudes en contactarnos. ¡Gracias por tu paciencia!

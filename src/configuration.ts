@@ -6,4 +6,10 @@ export default () => ({
     apiUrl: process.env.WOMPI_API_URL,
     integrity: process.env.WOMPI_INTEGRITY_KEY,
   },
+  mail: {
+    host: process.env.SMTP_HOST,
+    port: parseInt(process.env.SMTP_PORT),
+    user: process.env.SMTP_USER,
+    pass: process.env.SMTP_PASS,
+  },
 });

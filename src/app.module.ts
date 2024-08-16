@@ -1,4 +1,3 @@
-
 import { Module } from '@nestjs/common';
 import { ProductController } from './infrastructure/adapters/controllers/product.controller';
 import { GetAllProductsUseCase } from './application/use-cases/get-all-products.use-case';
@@ -32,8 +31,12 @@ import configuration from './configuration';
 import { PaymentController } from './infrastructure/adapters/controllers/payments.controller';
 import { WebhookController } from './infrastructure/adapters/controllers/webhook.controller';
 import { WebhookPort } from './application/ports/webhook.port';
+import { MailPort } from './application/ports/mail.port';
+import { SendMailUseCase } from './application/use-cases/send-mail.use.case';
+import { OtherModule } from './infrastructure/config/other.module';
 @Module({
   imports: [
+    OtherModule,
     DatabaseModule,
     HttpModule,
     ConfigModule.forRoot({
@@ -42,7 +45,12 @@ import { WebhookPort } from './application/ports/webhook.port';
       envFilePath: ['.env.development.local', '.env.development'],
     }),
   ],
-  controllers: [ProductController, TransactionController, PaymentController, WebhookController],
+  controllers: [
+    ProductController,
+    TransactionController,
+    PaymentController,
+    WebhookController,
+  ],
   providers: [
     {
       provide: GetAllProductsUseCase,
@@ -148,11 +156,7 @@ import { WebhookPort } from './application/ports/webhook.port';
           shipmentPort,
         );
       },
-      inject: [
-        'CustomerPort',
-        'TransactionPort',
-        'ShipmentPort',
-      ],
+      inject: ['CustomerPort', 'TransactionPort', 'ShipmentPort'],
     },
     {
       provide: UpdateTransactionStatusUseCase,
@@ -197,21 +201,42 @@ import { WebhookPort } from './application/ports/webhook.port';
       inject: ['ProductPort'],
     },
     {
+      provide: SendMailUseCase,
+      useFactory: (mailPort: MailPort) => {
+        return new SendMailUseCase(mailPort);
+      },
+      inject: ['MailPort'],
+    },
+    {
       provide: HandleWompiEventUseCase,
       useFactory: (
         webhookPort: WebhookPort,
         transactionPort: TransactionPort,
         paymentPort: PaymentPort,
         productPort: ProductPort,
+        mailPort: MailPort,
+        customerPort: CustomerPort,
+        shipmentPort: ShipmentPort,
       ) => {
         return new HandleWompiEventUseCase(
           webhookPort,
           transactionPort,
           paymentPort,
           productPort,
+          mailPort,
+          customerPort,
+          shipmentPort,
         );
       },
-      inject: ['WebhookPort', 'TransactionPort', 'PaymentPort', 'ProductPort'],
+      inject: [
+        'WebhookPort',
+        'TransactionPort',
+        'PaymentPort',
+        'ProductPort',
+        'MailPort',
+        'CustomerPort',
+        'ShipmentPort',
+      ],
     },
   ],
 })

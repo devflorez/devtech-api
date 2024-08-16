@@ -31,7 +31,11 @@ export class PrismaTransactionRepository
         ),
       },
       include: {
-        productTransactions: true,
+        productTransactions: {
+          include: {
+            product: true,
+          },
+        },
       },
     });
 
@@ -44,6 +48,11 @@ export class PrismaTransactionRepository
       createdTransaction.productTransactions.map((pt) => ({
         productId: pt.productId,
         quantity: pt.quantity,
+        product: {
+          name: pt.product.name,
+          imageUrl: pt.product.imageUrl,
+          price: pt.product.price,
+        },
       })),
     );
   }
@@ -52,7 +61,11 @@ export class PrismaTransactionRepository
     const transaction = await this.prisma.transaction.findUnique({
       where: { id },
       include: {
-        productTransactions: true,
+        productTransactions: {
+          include: {
+            product: true,
+          },
+        },
       },
     });
 
@@ -69,6 +82,11 @@ export class PrismaTransactionRepository
       transaction.productTransactions.map((pt) => ({
         productId: pt.productId,
         quantity: pt.quantity,
+        product: {
+          name: pt.product.name,
+          imageUrl: pt.product.imageUrl,
+          price: pt.product.price,
+        },
       })),
     );
   }
@@ -81,7 +99,11 @@ export class PrismaTransactionRepository
       where: { id },
       data: { status },
       include: {
-        productTransactions: true,
+        productTransactions: {
+          include: {
+            product: true,
+          },
+        },
       },
     });
 
@@ -94,6 +116,11 @@ export class PrismaTransactionRepository
       updatedTransaction.productTransactions.map((pt) => ({
         productId: pt.productId,
         quantity: pt.quantity,
+        product: {
+          name: pt.product.name,
+          imageUrl: pt.product.imageUrl,
+          price: pt.product.price,
+        },
       })),
     );
   }
