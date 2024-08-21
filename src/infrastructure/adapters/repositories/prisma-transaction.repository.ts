@@ -20,6 +20,8 @@ export class PrismaTransactionRepository
         customerId: transaction.customerId,
         total: transaction.total,
         status: 'PENDING',
+        subTotal: transaction.subTotal,
+        totalIva: transaction.totalIva,
         productTransactions: {
           createMany: {
             data: transaction.productTransactions,
@@ -44,6 +46,8 @@ export class PrismaTransactionRepository
       createdTransaction.customerId,
       createdTransaction.quantity,
       createdTransaction.total,
+      createdTransaction.subTotal,
+      createdTransaction.totalIva,
       createdTransaction.status,
       createdTransaction.productTransactions.map((pt) => ({
         productId: pt.productId,
@@ -78,6 +82,8 @@ export class PrismaTransactionRepository
       transaction.customerId,
       transaction.quantity,
       transaction.total,
+      transaction.subTotal,
+      transaction.totalIva,
       transaction.status,
       transaction.productTransactions.map((pt) => ({
         productId: pt.productId,
@@ -112,6 +118,8 @@ export class PrismaTransactionRepository
       updatedTransaction.customerId,
       updatedTransaction.quantity,
       updatedTransaction.total,
+      updatedTransaction.subTotal,
+      updatedTransaction.totalIva,
       updatedTransaction.status,
       updatedTransaction.productTransactions.map((pt) => ({
         productId: pt.productId,

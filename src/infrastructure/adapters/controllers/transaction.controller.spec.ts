@@ -52,6 +52,8 @@ describe('TransactionController', () => {
       1,
       10,
       199.99,
+      1999.9,
+      199.99,
       'PENDING',
       [
         {
@@ -80,6 +82,8 @@ describe('TransactionController', () => {
         phoneNumber: '3012345678',
       },
       total: 100,
+      subTotal: 90,
+      totalIva: 10,
       shipment: {
         address: '123 Main St',
         city: 'Springfield',
@@ -99,6 +103,8 @@ describe('TransactionController', () => {
       customerId: 1,
       quantity: 1,
       total: 100,
+      subTotal: 90,
+      totalIva: 10,
       status: 'PENDING',
       productTransactions: [
         {
@@ -127,6 +133,8 @@ describe('TransactionController', () => {
       customerId: 1,
       quantity: 1,
       total: 100,
+      subTotal: 90,
+      totalIva: 10,
       status: 'completed',
       productTransactions: [
         {

@@ -58,6 +58,8 @@ model Transaction {
   paymentId   Int?        @unique
   quantity    Int
   total       Int
+  subTotal    Int?
+  totalIva    Int?
   status      String
   createdAt   DateTime    @default(now())
   customer    Customer    @relation(fields: [customerId], references: [id])

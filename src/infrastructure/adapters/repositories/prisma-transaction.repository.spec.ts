@@ -36,6 +36,8 @@ describe('PrismaTransactionRepository', () => {
     const transactionDto: TransactionDto = {
       customerId: 1,
       total: 100,
+      subTotal: 90,
+      totalIva: 10,
       productTransactions: [
         { productId: 1, quantity: 2 },
         { productId: 2, quantity: 3 },
@@ -70,6 +72,8 @@ describe('PrismaTransactionRepository', () => {
       data: {
         customerId: transactionDto.customerId,
         total: transactionDto.total,
+        subTotal: transactionDto.subTotal,
+        totalIva: transactionDto.totalIva,
         status: 'PENDING',
         productTransactions: {
           createMany: {
@@ -101,6 +105,8 @@ describe('PrismaTransactionRepository', () => {
       customerId: 1,
       quantity: 5,
       total: 100,
+      subTotal: 90,
+      totalIva: 10,
       status: 'PENDING',
       productTransactions: [
         {
@@ -126,6 +132,8 @@ describe('PrismaTransactionRepository', () => {
         transaction.customerId,
         transaction.quantity,
         transaction.total,
+        transaction.subTotal,
+        transaction.totalIva,
         transaction.status,
         transaction.productTransactions.map((pt) => ({
           productId: pt.productId,

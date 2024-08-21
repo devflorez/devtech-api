@@ -4,8 +4,6 @@ import { CustomerDto } from './customer.entity';
 import { Type } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
 import { ShipmentBodyDto } from './shipment.entity';
-import { Product } from './product.entity';
-import { of } from 'rxjs';
 
 export class TransactionBodyDto {
   @ValidateNested()
@@ -47,7 +45,24 @@ export class TransactionBodyDto {
 
   @IsNumber()
   @IsNotEmpty()
+  @ApiProperty({
+    example: 100,
+  })
   total: number;
+
+  @IsNumber()
+  @IsNotEmpty()
+  @ApiProperty({
+    example: 90,
+  })
+  subTotal: number;
+
+  @IsNumber()
+  @IsNotEmpty()
+  @ApiProperty({
+    example: 10,
+  })
+  totalIva: number;
 }
 
 export class TransactionDto {
@@ -66,6 +81,14 @@ export class TransactionDto {
   @IsNumber()
   @IsNotEmpty()
   total: number;
+
+  @IsNumber()
+  @IsNotEmpty()
+  subTotal: number;
+
+  @IsNumber()
+  @IsNotEmpty()
+  totalIva: number;
 }
 
 export class Transaction {
@@ -74,14 +97,18 @@ export class Transaction {
     public customerId: number,
     public quantity: number,
     public total: number,
+    public subTotal: number,
+    public totalIva: number,
     public status: string,
-    public productTransactions: { productId: number; quantity: number,
+    public productTransactions: {
+      productId: number;
+      quantity: number;
       product: {
-        name: string,
-        imageUrl: string,
-        price: number,
-      }
-     }[],
+        name: string;
+        imageUrl: string;
+        price: number;
+      };
+    }[],
     public paymentId?: number | null,
   ) {}
 }

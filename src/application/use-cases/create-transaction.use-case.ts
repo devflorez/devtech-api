@@ -26,6 +26,8 @@ export class CreateTransactionUseCase {
       customerId: customer.id,
       productTransactions: transactionBodyDto.productTransactions,
       total: transactionBodyDto.total,
+      subTotal: transactionBodyDto.subTotal,
+      totalIva: transactionBodyDto.totalIva,
     });
 
 
